@@ -17,9 +17,9 @@ import org.jellyfin.mobile.utils.getItems
 
 class MusicViewModel(viewInfo: UserViewInfo) : LibraryViewModel(viewInfo) {
     val currentTab = mutableStateOf(0)
-    val albums = mutableStateListOf<AlbumInfo>()
-    val artists = mutableStateListOf<ArtistInfo>()
-    val songs = mutableStateListOf<SongInfo>()
+    val albums = mutableStateListOf<Album>()
+    val artists = mutableStateListOf<Artist>()
+    val songs = mutableStateListOf<Track>()
 
     init {
         require(viewInfo.collectionType == CollectionType.Music) {

@@ -3,7 +3,6 @@ package org.jellyfin.mobile.ui.screen.library
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import org.jellyfin.apiclient.model.entities.CollectionType
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.model.dto.UserViewInfo
 import org.jellyfin.mobile.ui.ScreenScaffold
@@ -25,8 +24,8 @@ class LibraryScreen(private val viewInfo: UserViewInfo) : AbstractScreen() {
             hasElevation = false,
         ) {
             when (viewInfo.collectionType) {
-                CollectionType.Music -> MusicLibraryContent()
-                CollectionType.MusicVideos -> MusicVideoLibraryContent()
+                "Music" -> MusicLibraryContent()
+                "MusicVideos" -> MusicVideoLibraryContent()
             }
         }
     }

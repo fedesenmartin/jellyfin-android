@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.jellyfin.mobile.R
-import org.jellyfin.mobile.model.dto.AlbumInfo
+import org.jellyfin.mobile.model.dto.Album
 import org.jellyfin.mobile.ui.DefaultCornerRounding
 import org.jellyfin.mobile.ui.ToolbarBackButton
 import org.jellyfin.mobile.ui.inject
@@ -37,7 +37,7 @@ import org.jellyfin.mobile.ui.screen.AbstractScreen
 import org.jellyfin.mobile.ui.utils.ApiImage
 import org.jellyfin.mobile.utils.ImageResolver
 
-class AlbumScreen(private val albumInfo: AlbumInfo) : AbstractScreen() {
+class AlbumScreen(private val albumInfo: Album) : AbstractScreen() {
 
     @OptIn(ExperimentalUnsignedTypes::class)
     @Composable

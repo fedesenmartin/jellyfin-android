@@ -8,8 +8,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
 import org.jellyfin.mobile.controller.ServerController
-import org.jellyfin.mobile.model.dto.AlbumInfo
-import org.jellyfin.mobile.model.dto.ArtistInfo
 import org.jellyfin.mobile.model.dto.UserViewInfo
 import org.jellyfin.mobile.model.state.LoginState
 import org.jellyfin.mobile.ui.screen.SetupScreen
@@ -51,6 +49,6 @@ fun AppRouter() {
 sealed class Routing {
     object Home : Routing()
     class Library(val info: UserViewInfo) : Routing()
-    class Album(val info: AlbumInfo) : Routing()
-    class Artist(val info: ArtistInfo) : Routing()
+    class Album(val info: org.jellyfin.mobile.model.dto.Album) : Routing()
+    class Artist(val info: org.jellyfin.mobile.model.dto.Artist) : Routing()
 }

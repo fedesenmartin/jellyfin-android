@@ -40,8 +40,6 @@ class ServerController(
 
     init {
         scope.launch {
-            migrateFromPreferences()
-
             val serverUser = withContext(Dispatchers.IO) {
                 val serverId = appPreferences.currentServerId ?: return@withContext null
                 val userId = appPreferences.currentUserId ?: return@withContext null
@@ -59,41 +57,6 @@ class ServerController(
                 LoginState.NOT_LOGGED_IN
             }
         }
-    }
-
-    /**
-     * Migrate from preferences if necessary
-     */
-    @Suppress("DEPRECATION")
-    suspend fun migrateFromPreferences() {
-        appPreferences.instanceUrl?.let { url ->
-            setupServer(url)
-            appPreferences.instanceUrl = null
-        }
-    }
-
-    suspend fun setupServer(hostname: String) {
-        appPreferences.currentServerId = withContext(Dispatchers.IO) {
-            serverDao.getServerByHostname(hostname)?.id ?: serverDao.insert(hostname)
-        }
-    }
-
-    suspend fun setupUser(serverId: Long, userId: String, accessToken: String) {
-        appPreferences.currentUserId = withContext(Dispatchers.IO) {
-            userDao.upsert(serverId, userId, accessToken)
-        }
-        apiClient.SetAuthenticationInfo(accessToken, userId)
-    }
-
-    suspend fun loadCurrentServer(): ServerEntity? = withContext(Dispatchers.IO) {
-        val serverId = appPreferences.currentServerId ?: return@withContext null
-        serverDao.getServer(serverId)
-    }
-
-    suspend fun loadCurrentServerUser(): ServerUser? = withContext(Dispatchers.IO) {
-        val serverId = appPreferences.currentServerId ?: return@withContext null
-        val userId = appPreferences.currentUserId ?: return@withContext null
-        userDao.getServerUser(serverId, userId)
     }
 
     suspend fun checkServerUrl(hostname: String): CheckUrlState {

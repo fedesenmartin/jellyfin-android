@@ -1,10 +1,12 @@
 package org.jellyfin.mobile.model.dto
 
-import org.jellyfin.apiclient.model.dto.BaseItemDto
-import org.jellyfin.apiclient.model.entities.ImageType
+import org.jellyfin.sdk.model.api.BaseItemDto
+import org.jellyfin.sdk.model.api.ImageType
 
-fun BaseItemDto.toFolderInfo() = FolderInfo(id, name.orEmpty(), imageTags[ImageType.Primary])
-fun BaseItemDto.toAlbumInfo() = AlbumInfo(id, name.orEmpty(), albumArtist.orEmpty(), imageTags[ImageType.Primary])
-fun BaseItemDto.toArtistInfo() = ArtistInfo(id, name.orEmpty(), imageTags[ImageType.Primary])
-fun BaseItemDto.toSongInfo() = SongInfo(id, albumId, name.orEmpty(), artists?.joinToString().orEmpty(), imageTags[ImageType.Primary])
-fun BaseItemDto.toMusicVideoInfo() = MusicVideoInfo(id, name.orEmpty(), imageTags[ImageType.Primary])
+fun BaseItemDto.toUserViewInfo() = UserViewInfo(id, name.orEmpty(), collectionType.orEmpty(), imageTags[ImageType.PRIMARY])
+
+fun BaseItemDto.toFolderInfo() = FolderInfo(id, name.orEmpty(), imageTags[ImageType.PRIMARY])
+fun BaseItemDto.toAlbumInfo() = Album(id, name.orEmpty(), albumArtist.orEmpty(), artists.orEmpty(), imageTags[ImageType.PRIMARY])
+fun BaseItemDto.toArtistInfo() = Artist(id, name.orEmpty(), imageTags[ImageType.PRIMARY])
+fun BaseItemDto.toSongInfo() = Track(id, name.orEmpty(), artists.orEmpty(), albumId, imageTags[ImageType.PRIMARY])
+fun BaseItemDto.toMusicVideoInfo() = MusicVideo(id, name.orEmpty(), artists.orEmpty(), album, imageTags[ImageType.PRIMARY])

@@ -6,15 +6,15 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jellyfin.apiclient.interaction.ApiClient
-import org.jellyfin.apiclient.model.dto.BaseItemDto
-import org.jellyfin.apiclient.model.entities.CollectionType
-import org.jellyfin.apiclient.model.entities.ImageType
 import org.jellyfin.mobile.model.dto.UserViewInfo
-import org.jellyfin.mobile.utils.getUserViews
+import org.jellyfin.mobile.model.dto.toUserViewInfo
+import org.jellyfin.sdk.api.operations.UserViewsApi
+import org.jellyfin.sdk.model.api.BaseItemDto
+import org.jellyfin.sdk.model.api.ImageType
 
 class LibraryController(
-    private val apiClient: ApiClient,
+    private val apiController: ApiController,
+    private val userViewsApi: UserViewsApi,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
 
@@ -22,8 +22,9 @@ class LibraryController(
 
     init {
         scope.launch {
-            userViews = apiClient.getUserViews()?.run {
-                items.map(BaseItemDto::toUserViewInfo).filter { item -> item.collectionType in SUPPORTED_COLLECTION_TYPES }
+            val response by userViewsApi.getUserViews(apiController.requireUser())
+            userViews = response.items?.run {
+                map(BaseItemDto::toUserViewInfo).filter { item -> item.collectionType in SUPPORTED_COLLECTION_TYPES }
             } ?: emptyList()
         }
     }
@@ -31,12 +32,10 @@ class LibraryController(
 
     companion object {
         val SUPPORTED_COLLECTION_TYPES = setOf(
-            CollectionType.Movies,
-            CollectionType.TvShows,
-            CollectionType.Music,
-            CollectionType.MusicVideos,
+            "Movies",
+            "TvShows",
+            "Music",
+            "MusicVideos",
         )
     }
 }
-
-private fun BaseItemDto.toUserViewInfo() = UserViewInfo(id, name, collectionType, imageTags[ImageType.Primary])

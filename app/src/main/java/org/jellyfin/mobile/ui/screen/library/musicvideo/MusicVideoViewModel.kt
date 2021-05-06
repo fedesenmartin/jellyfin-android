@@ -8,6 +8,7 @@ import org.jellyfin.apiclient.model.entities.CollectionType
 import org.jellyfin.apiclient.model.querying.ItemQuery
 import org.jellyfin.apiclient.model.querying.ItemSortBy
 import org.jellyfin.mobile.model.dto.BaseMediaInfo
+import org.jellyfin.mobile.model.dto.MusicVideo
 import org.jellyfin.mobile.model.dto.UserViewInfo
 import org.jellyfin.mobile.model.dto.toFolderInfo
 import org.jellyfin.mobile.model.dto.toMusicVideoInfo
@@ -15,7 +16,7 @@ import org.jellyfin.mobile.ui.screen.library.LibraryViewModel
 import org.jellyfin.mobile.utils.getItems
 
 class MusicVideoViewModel(viewInfo: UserViewInfo) : LibraryViewModel(viewInfo) {
-    val contents = mutableStateListOf<BaseMediaInfo>()
+    val contents = mutableStateListOf<MusicVideo>()
 
     init {
         require(viewInfo.collectionType == CollectionType.MusicVideos) {

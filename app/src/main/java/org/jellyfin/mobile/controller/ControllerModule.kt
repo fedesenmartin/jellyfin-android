@@ -4,5 +4,5 @@ import org.koin.dsl.module
 
 val controllerModule = module {
     single { ServerController(get(), get(), get(), get(), get()) }
-    single { LibraryController(get()) }
+    single { LibraryController(get(), get()) }
 }

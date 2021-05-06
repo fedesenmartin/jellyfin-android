@@ -5,14 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jellyfin.mobile.model.dto.AlbumInfo
+import org.jellyfin.mobile.model.dto.Album
 import org.jellyfin.mobile.ui.LocalBackStack
 import org.jellyfin.mobile.ui.Routing
 import org.jellyfin.mobile.ui.screen.library.BaseMediaItem
 import org.jellyfin.mobile.ui.utils.GridListFor
 
 @Composable
-fun AlbumList(albums: SnapshotStateList<AlbumInfo>) {
+fun AlbumList(albums: SnapshotStateList<Album>) {
     GridListFor(
         items = albums,
         numberOfColumns = 3,

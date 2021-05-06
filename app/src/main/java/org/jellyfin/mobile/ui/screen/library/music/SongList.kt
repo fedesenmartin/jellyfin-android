@@ -24,21 +24,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.jellyfin.apiclient.model.entities.ImageType
 import org.jellyfin.mobile.R
-import org.jellyfin.mobile.model.dto.SongInfo
+import org.jellyfin.mobile.model.dto.Track
 import org.jellyfin.mobile.ui.DefaultCornerRounding
 import org.jellyfin.mobile.ui.utils.ApiImage
+import org.jellyfin.sdk.model.api.ImageType
 import timber.log.Timber
 
 @Composable
-fun SongList(songs: SnapshotStateList<SongInfo>) {
+fun SongList(songs: SnapshotStateList<Track>) {
     LazyColumn(
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
     ) {
         items(items = songs) { song ->
-            Song(songInfo = song, onClick = {
-                Timber.d("Clicked ${song.name}")
+            Song(track = song, onClick = {
+                Timber.d("Clicked ${song.title}")
             })
         }
     }
@@ -47,7 +47,7 @@ fun SongList(songs: SnapshotStateList<SongInfo>) {
 @Stable
 @Composable
 fun Song(
-    songInfo: SongInfo,
+    track: Track,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     onClickMenu: () -> Unit = {}
@@ -62,10 +62,10 @@ fun Song(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ApiImage(
-            id = songInfo.albumId,
+            id = track.album,
             modifier = Modifier.size(56.dp).clip(DefaultCornerRounding),
-            imageType = ImageType.Primary,
-            imageTag = songInfo.primaryImageTag,
+            imageType = ImageType.PRIMARY,
+            imageTag = track.primaryImageTag,
             fallback = {
                 Image(
                     painter = painterResource(R.drawable.fallback_image_album_cover),
@@ -75,13 +75,13 @@ fun Song(
         )
         Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
             Text(
-                text = songInfo.name,
+                text = track.title,
                 modifier = Modifier.padding(bottom = 4.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
             )
             Text(
-                text = songInfo.artist,
+                text = track.artists.joinToString(),
                 modifier = Modifier.padding(bottom = 2.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,

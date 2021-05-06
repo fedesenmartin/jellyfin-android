@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import org.jellyfin.apiclient.model.entities.CollectionType
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.model.dto.FolderInfo
-import org.jellyfin.mobile.model.dto.MusicVideoInfo
+import org.jellyfin.mobile.model.dto.MusicVideo
 import org.jellyfin.mobile.model.dto.UserViewInfo
 import org.jellyfin.mobile.ui.LocalBackStack
 import org.jellyfin.mobile.ui.Routing
@@ -29,7 +29,7 @@ fun MusicVideoList(viewModel: MusicVideoViewModel) {
     GridListFor(items = viewModel.contents) { info ->
         when (info) {
             is FolderInfo -> FolderItem(folderInfo = info, modifier = Modifier.fillItemMaxWidth())
-            is MusicVideoInfo -> MusicVideoItem(musicVideoInfo = info, modifier = Modifier.fillItemMaxWidth())
+            is MusicVideo -> MusicVideoItem(musicVideo = info, modifier = Modifier.fillItemMaxWidth())
         }
     }
 }
@@ -60,9 +60,9 @@ fun FolderItem(folderInfo: FolderInfo, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MusicVideoItem(musicVideoInfo: MusicVideoInfo, modifier: Modifier = Modifier) {
+fun MusicVideoItem(musicVideo: MusicVideo, modifier: Modifier = Modifier) {
     BaseMediaItem(
-        info = musicVideoInfo,
+        info = musicVideo,
         modifier = modifier,
         imageDecorator = {
             // TODO add watched state
