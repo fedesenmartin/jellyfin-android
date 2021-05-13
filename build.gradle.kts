@@ -22,6 +22,7 @@ allprojects {
                 includeGroup(Dependencies.Groups.jellyfin)
             }
         }
+        maven { setUrl("https://jitpack.io") }
     }
 }
 
