@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.FixedScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -23,7 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jellyfin.mobile.R
-import org.jellyfin.mobile.controller.ServerController
+import org.jellyfin.mobile.controller.LoginController
 import org.jellyfin.mobile.model.state.AuthState
 import org.jellyfin.mobile.model.state.CheckUrlState
 import org.jellyfin.mobile.ui.CenterRow
@@ -32,8 +33,8 @@ import org.jellyfin.mobile.ui.inject
 class SetupScreen : AbstractScreen() {
     @Composable
     override fun Content() {
-        val serverController: ServerController by inject()
-        val serverSelectionState = mutableStateOf(false)
+        val loginController: LoginController by inject()
+        val serverSelectionState = remember { mutableStateOf(false) }
         val serverSelected by serverSelectionState
         Surface(color = MaterialTheme.colors.background) {
             Column(
@@ -43,11 +44,11 @@ class SetupScreen : AbstractScreen() {
                 Crossfade(targetState = serverSelected) { serverSelected ->
                     if (!serverSelected) {
                         ServerSelection(
-                            serverController = serverController,
+                            loginController = loginController,
                             serverSelectionState = serverSelectionState,
                         )
                     } else {
-                        AuthInput(serverController = serverController)
+                        AuthInput(loginController = loginController)
                     }
                 }
             }
@@ -76,7 +77,7 @@ class SetupScreen : AbstractScreen() {
 
     @Composable
     fun ServerSelection(
-        serverController: ServerController,
+        loginController: LoginController,
         serverSelectionState: MutableState<Boolean>
     ) {
         val coroutineScope = rememberCoroutineScope()
@@ -88,7 +89,7 @@ class SetupScreen : AbstractScreen() {
 
         ServerSelectionStateless(
             text = hostname,
-            errorText = error?.run { stringResource(message) },
+            errorText = error?.message,
             onTextChange = { value ->
                 urlStateDelegate = CheckUrlState.Unchecked
                 hostname = value
@@ -97,10 +98,12 @@ class SetupScreen : AbstractScreen() {
             submit = {
                 coroutineScope.launch {
                     checkUrlState.value = CheckUrlState.Pending
-                    serverController.checkServerUrl(hostnameInputState.value).let { state ->
-                        checkUrlState.value = state
-                        if (state is CheckUrlState.Success) {
-                            serverSelectionState.value = true
+                    with(loginController) {
+                        LocalContext.current.checkServerUrl(hostnameInputState.value).let { state ->
+                            checkUrlState.value = state
+                            if (state is CheckUrlState.Success) {
+                                serverSelectionState.value = true
+                            }
                         }
                     }
                 }
@@ -167,7 +170,7 @@ class SetupScreen : AbstractScreen() {
 
     @Composable
     fun AuthInput(
-        serverController: ServerController
+        loginController: LoginController
     ) {
         val coroutineScope = rememberCoroutineScope()
         val authState = remember { mutableStateOf(AuthState.UNSET) }
@@ -196,7 +199,7 @@ class SetupScreen : AbstractScreen() {
 
                 coroutineScope.launch {
                     authStateDelegate = AuthState.PENDING
-                    val authSuccess = serverController.authenticate(username, password)
+                    val authSuccess = loginController.authenticate(username, password)
                     authStateDelegate = if (authSuccess) AuthState.SUCCESS else AuthState.FAILURE
                 }
             },

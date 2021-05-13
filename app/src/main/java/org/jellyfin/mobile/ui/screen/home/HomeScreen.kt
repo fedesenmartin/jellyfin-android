@@ -15,17 +15,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.jellyfin.mobile.R
 import org.jellyfin.mobile.controller.LibraryController
-import org.jellyfin.mobile.controller.ServerController
+import org.jellyfin.mobile.controller.LoginController
 import org.jellyfin.mobile.ui.ScreenScaffold
 import org.jellyfin.mobile.ui.screen.AbstractScreen
 
 class HomeScreen(
-    private val serverController: ServerController,
+    private val loginController: LoginController,
     private val libraryController: LibraryController,
 ) : AbstractScreen() {
     @Composable
     override fun Content() {
-        val currentUser = serverController.userInfo ?: return
+        val currentUser = loginController.userInfo ?: return
         val userDetailsState = remember { mutableStateOf(false) }
         val (userDetailsShown, showUserDetails) = userDetailsState
         ScreenScaffold(
@@ -49,7 +49,7 @@ class HomeScreen(
             }
             if (userDetailsShown) {
                 UserDetails(
-                    serverController = serverController,
+                    loginController = loginController,
                     user = currentUser,
                     showUserDetails = showUserDetails,
                 )

@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.github.zsoltk.compose.router.BackStack
 import com.github.zsoltk.compose.router.Router
-import org.jellyfin.mobile.controller.ServerController
+import org.jellyfin.mobile.controller.LoginController
 import org.jellyfin.mobile.model.dto.UserViewInfo
 import org.jellyfin.mobile.model.state.LoginState
 import org.jellyfin.mobile.ui.screen.SetupScreen
@@ -18,8 +18,8 @@ import org.jellyfin.mobile.ui.screen.library.music.ArtistScreen
 
 @Composable
 fun AppContent() {
-    val serverController: ServerController by inject()
-    Crossfade(targetState = serverController.loginState) { loginState ->
+    val loginController: LoginController by inject()
+    Crossfade(targetState = loginController.loginState) { loginState ->
         when (loginState) {
             LoginState.PENDING -> Unit // do nothing
             LoginState.NOT_LOGGED_IN -> injectContent<SetupScreen>()
